@@ -71,7 +71,7 @@ metadata:
 spec:
   params:
     - name: repository
-      value: "https://github.com/MGsus/AngularWebList"
+      value: "https://github.com/emeloibmco/ibm-Kubernetes-Service-Tekton"
     - name: revision
       value: "master"
 ---
