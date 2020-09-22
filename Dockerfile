@@ -21,7 +21,7 @@ COPY . .
 RUN npm run build
 
 # Angular app server
-FROM nginxinc/nginx-unprivileged:stable-alpine
+FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=frontend /usr/src/app/dist/angular-web-app /usr/share/nginx/html
 
