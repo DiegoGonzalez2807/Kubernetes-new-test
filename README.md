@@ -101,7 +101,7 @@ Guardamos los cambios.
 
 Añadimos 4 propiedades de Texto y una propiedad segura, como se muestra en la imagen, asignando los valores según la configuración de nuestro cluster y una llave API.
 
-- cluster: El nombre del cluster sobre el que vamos a realizar el despliegue, en este caso, k8s-demo.
+- cluster: El nombre del cluster sobre el que vamos a realizar el despliegue, en este caso, k8s-cluster.
 - clusterNamespace: El espacio de nombres donde se almacenarán los recursos k8s creados. Utilizar el formato `<su-nombre>-ns`.
 - clusterRegion: La región en la que se encuentra nuestro cluster, en este caso, us-south.
 - registryNamespace: Espacio de nombres del IBM Container Registry donde se guardará la imagen docker creada por Tekton. Ya hemos preparado un namespace `tekton-handson`.
