@@ -35,7 +35,7 @@ El repositorio ya cuenta con los archivos de configuración necesarios, la carpe
 
 2. Procedemos a crear un nuevo toolchain (cadena de herramientas) seleccionando el botón create toolchain.
 
-**Importante**: Revisar que la localización de nuestra toolchain sea la misma a nuestro cluster de Kubernetes, para esta demo usaremos Dallas.
+**Importante**: Revisar que la localización de nuestra toolchain sea la misma a nuestro cluster de Kubernetes, para esta demo usaremos **Washington DC** y el grupo de recursos **openshift-workshop**.
 
 En la pantalla de creación seleccionamos el recuadro Build your own toolchain en la sección de Other Templates.
 
