@@ -8,11 +8,9 @@ Con Tekton aseguramos el despliegue en un cluster de Kubernetes con la opción d
 
 1. [Requisitos](#-requisitos)
 2. [Hands On!](#-hands-on)<br>
-   3.1 [Plugins](#-instalar-o-actualizar-los-plugins-necesarios-de-ibm-cloud-cli)<br>
-   3.2 [Despliegue de la base de datos](#-desplegar-la-imagen-de-nuestra-base-de-datos)<br>
-   3.3 [Depliegue de la aplicación con Tekton](#-desplegar-nuestra-aplicación-con-tekton)<br>
+   2.1 [Depliegue de la aplicación con Tekton](#-desplegar-nuestra-aplicación-con-tekton)<br>
 3. [Extras: Private Worker](#extras-private-worker)
-4. [Referencias y documentación útil](#referencias-y-documentación-útil)
+4. [Recursos Adicionales](#recursos-adicionales)
 
 ## Requisitos
 
@@ -149,6 +147,14 @@ Así debera aparecer nuestra Worker Pool una vez configurado nuestro Worker
 ### <p align=center><img src=".github/devops-kubeWorkerConf.png"></p>
 
 Ya con esto podemos ir al Dashboard de Tekton y ejecutar manualmente un pipelineRun.
+
+## Recursos Adicionales
+
+<img src=".github/tekton-pipelines.png" height="24"> [Página Oficial de Tekton](https://tekton.dev/)
+
+:cloud: [Tekton en IBM Cloud](https://www.ibm.com/cloud/tekton)
+
+- Si tienes preguntas o comentarios, puedes unirte en Slack al canal [IBM Cloud DevOps](https://ic-devops-slack-invite.us-south.devops.cloud.ibm.com/)
 
 ## Autores
 
