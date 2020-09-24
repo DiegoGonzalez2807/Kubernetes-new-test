@@ -114,8 +114,8 @@ EOF
     IP_ADDR=$(kubectl get routes --namespace ${CLUSTER_NAMESPACE} -o json | jq --arg service "$APP_SERVICE" -r '.items[] | select(.spec.to.name==$service) | .status.ingress[0].host')
     PORT=80
   else
-    IP_ADDR=$(ibmcloud ks workers --cluster ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
-    PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${APP_SERVICE} | sed 's/.*:\([0-9]*\).*/\1/g')
+    IP_ADDR=$(kubectl get svc -n ${CLUSTER_NAMESPACE} -o json | jq --arg "angulist-app" -r '.items[] | .status.loadBalancer.ingress[0].hostname')
+    PORT=$(kubectl get svc -n ${CLUSTER_NAMESPACE} -o json | jq --arg "${APP_SERVICE}" -r '.items[] | .spec.ports[0].port')
   fi
   echo ""
   echo -e "VIEW THE APPLICATION AT: http://${IP_ADDR}:${PORT}"
