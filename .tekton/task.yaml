@@ -50,7 +50,7 @@ spec:
         - name: API
           value: $(inputs.params.api)
         - name: REGION
-          value: $(inputs.arams.registryRegion)
+          value: $(inputs.params.registryRegion)
         - name: HOME
           value: "/root"
         - name: REGISTRY_NAMESPACE
