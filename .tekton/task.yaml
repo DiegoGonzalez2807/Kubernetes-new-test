@@ -21,6 +21,9 @@ spec:
       default: "angulist-app"
     - name: registryRegion
       description: the ibmcloud registry region
+    - name: dockerDef
+      description: the docker def
+      default: "/"
   workspaces:
   - name: task-pvc
     mountPath: /artifacts   
@@ -41,7 +44,7 @@ spec:
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
       env:
         - name: DOCKER_FILE
-          value: "/"
+          value: $(params.dockerDef)
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
         - name: API
