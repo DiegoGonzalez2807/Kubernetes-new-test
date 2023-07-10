@@ -44,25 +44,25 @@ spec:
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
       env:
         - name: DOCKER_FILE
-          value: $(params.dockerDef)
+          value: $(inputs.params.dockerDef)
         - name: IBMCLOUD_API_KEY
-          value: $(params.apikey)
+          value: $(inputs.params.apikey)
         - name: API
-          value: $(params.api)
+          value: $(inputs.params.api)
         - name: REGION
-          value: $(params.registryRegion)
+          value: $(inputs.arams.registryRegion)
         - name: HOME
           value: "/root"
         - name: REGISTRY_NAMESPACE
-          value: $(params.registryNamespace)
+          value: $(inputs.params.registryNamespace)
         - name: IMAGE_NAME
-          value: $(params.imageName)
+          value: $(inputs.params.imageName)
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
           ibmcloud login -a $API -r $REGION;
           export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
-          source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh"
+          source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh");
 
     - name: build-docker-image
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
