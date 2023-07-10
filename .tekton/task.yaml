@@ -21,9 +21,6 @@ spec:
       default: "angulist-app"
     - name: registryRegion
       description: the ibmcloud registry region
-    - name: DOCKER_FILE
-      description: Dockerfile test
-      default: .
   workspaces:
   - name: task-pvc
     mountPath: /artifacts   
@@ -43,6 +40,8 @@ spec:
     - name: pre-build-check
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
       env:
+        - name: DOCKER_FILE
+          value: "/"
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
         - name: API
