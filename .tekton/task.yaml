@@ -21,6 +21,9 @@ spec:
       default: "angulist-app"
     - name: registryRegion
       description: the ibmcloud registry region
+    - name: DOCKER_FILE
+      description: Dockerfile test
+      default: .
   workspaces:
   - name: task-pvc
     mountPath: /artifacts   
@@ -57,7 +60,7 @@ spec:
         - set -e -o pipefail;
           ibmcloud login -a $API -r $REGION;
           export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
-          source ./scripts/pre-build-check.sh
+          source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh"
 
     - name: build-docker-image
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
