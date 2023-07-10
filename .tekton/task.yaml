@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
   name: build-task
@@ -29,9 +29,9 @@ spec:
       image: alpine/git
       env:
         - name: REPOSITORY
-          value: $(params.repository)
+          value: $(inputs.params.repository)
         - name: REVISION
-          value: $(params.revision)
+          value: $(inputs.params.revision)
       command: ["/bin/sh", "-c"]
       args:
         - set -e -o pipefail;
