@@ -13,7 +13,7 @@
 #   limitations under the License.
 
 # Angular app image
-FROM node:alpine as frontend
+FROM node:16.14.0-alpine as frontend
 WORKDIR /usr/src/app
 COPY package.json .
 RUN npm install
