@@ -92,7 +92,7 @@ else
   done
 fi
 set -x
-buildctl --help
+buildctl debug config
 buildctl build \
     --frontend dockerfile.v0 \
     --local context=. \
