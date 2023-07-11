@@ -53,13 +53,13 @@ if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
 IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
 
 # Checking ig buildctl is installed
-if which buildctl > /dev/null 2>&1; then
-  buildctl --version
-else 
+#if which buildctl > /dev/null 2>&1; then
+ # buildctl --version
+#else 
   echo "Installing Buildkit builctl"
   curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
   buildctl --version
-fi
+#fi
 
 # Create the config.json file to make private container registry accessible
 export DOCKER_CONFIG=$(mktemp -d -t cr-config-XXXXXXXXXX)
