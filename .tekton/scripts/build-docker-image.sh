@@ -93,10 +93,9 @@ else
 fi
 set -x
 buildctl build \
-    --frontend=dockerfile.v0 \
+    --frontend dockerfile.v0 \
     --local context=. \
     --local dockerfile=.
-set +x
 
 ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
 
