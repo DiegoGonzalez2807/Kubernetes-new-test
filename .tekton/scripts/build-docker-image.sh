@@ -91,7 +91,7 @@ docker buildx create --config ./buildkitd.toml  --name myconfbuilder4
 docker buildx use myconfbuilder4
 
 buildctl build \
-    --frontend=dockerfile.v0 --opt filename=${DOCKER_FILE} --local dockerfile=. \
+    --frontend=dockerfile.v0 --opt filename=Dockerfile --local dockerfile=. \
     ${BUILD_ARGS} --local context=. \
     --import-cache type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
     --output type=image,name="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}",push=true
