@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: build-task
@@ -21,9 +21,6 @@ spec:
       default: "angulist-app"
     - name: registryRegion
       description: the ibmcloud registry region
-    - name: dockerDef
-      description: the docker def
-      default: "./root"
   workspaces:
   - name: task-pvc
     mountPath: /artifacts   
@@ -32,36 +29,35 @@ spec:
       image: alpine/git
       env:
         - name: REPOSITORY
-          value: $(inputs.params.repository)
+          value: $(params.repository)
         - name: REVISION
-          value: $(inputs.params.revision)
+          value: $(params.revision)
       command: ["/bin/sh", "-c"]
       args:
         - set -e -o pipefail;
           echo "Cloning $REPOSITORY";
-          git clone -q -b $REVISION $REPOSITORY .;
+          cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
     - name: pre-build-check
       image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
         - name: IBMCLOUD_API_KEY
-          value: $(inputs.params.apikey)
+          value: $(params.apikey)
         - name: API
-          value: $(inputs.params.api)
+          value: $(params.api)
         - name: REGION
-          value: $(inputs.params.registryRegion)
+          value: $(params.registryRegion)
         - name: HOME
           value: "/root"
         - name: REGISTRY_NAMESPACE
-          value: $(inputs.params.registryNamespace)
+          value: $(params.registryNamespace)
         - name: IMAGE_NAME
-          value: $(inputs.params.imageName)
+          value: $(params.imageName)
       command: ["/bin/bash", "-c"]
       args:
         - set -e -o pipefail;
           ibmcloud login -a $API -r $REGION;
-          export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";    
-          cd /workspace && source ./scripts/pre-build-check.sh;
-
+          export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
+          cd /workspace && source .tekton/scripts/pre-build-check.sh;
     - name: build-docker-image
       image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
@@ -90,6 +86,7 @@ spec:
           export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
           export GIT_COMMIT=$(git rev-parse HEAD);
           export REGISTRY_URL=$(ibmcloud cr info | sed "2q;d" | awk '{for(i=1;i<=NF;i++) if ($i=="Registry") print $(i+1)}');
+          set -x;
           cd /workspace && source .tekton/scripts/build-docker-image.sh;
 ---
 apiVersion: tekton.dev/v1beta1
