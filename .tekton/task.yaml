@@ -43,8 +43,6 @@ spec:
     - name: pre-build-check
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
       env:
-        - name: DOCKER_ROOT
-          value: $(inputs.params.dockerDef)
         - name: IBMCLOUD_API_KEY
           value: $(inputs.params.apikey)
         - name: API
