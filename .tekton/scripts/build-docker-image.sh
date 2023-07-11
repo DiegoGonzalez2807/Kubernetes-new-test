@@ -87,7 +87,7 @@ else
 fi
 set -x
 buildctl build \
-    --frontend dockerfile.v0 --opt filename=${DOCKER_FILE} --local dockerfile=. \
+    --frontend=dockerfile.v0 --opt filename=${DOCKER_FILE} --local dockerfile=. \
     ${BUILD_ARGS} --local context=. \
     --import-cache type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
     --output type=image,name="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}",push=true
