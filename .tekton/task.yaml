@@ -41,7 +41,7 @@ spec:
           echo "Cloning $REPOSITORY";
           git clone -q -b $REVISION $REPOSITORY .;
     - name: pre-build-check
-      image: icr.io/continuous-delivery/pipeline/pipeline-base-image
+      image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
         - name: IBMCLOUD_API_KEY
           value: $(inputs.params.apikey)
@@ -65,7 +65,7 @@ spec:
           source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh");
 
     - name: build-docker-image
-      image: icr.io/continuous-delivery/pipeline/pipeline-base-image
+      image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
@@ -129,7 +129,7 @@ spec:
           echo "Cloning $REPOSITORY";
           cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
     - name: check-vulnerabilities
-      image: icr.io/continuous-delivery/pipeline/pipeline-base-image
+      image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
@@ -188,7 +188,7 @@ spec:
           echo "Cloning $REPOSITORY";
           cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
     - name: pre-deploy-check
-      image: icr.io/continuous-delivery/pipeline/pipeline-base-image
+      image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
@@ -216,7 +216,7 @@ spec:
           cp /artifacts/build.properties .;
           cd /workspace && source .tekton/scripts/pre-deploy-check.sh;
     - name: deploy-to-kubernetes
-      image: icr.io/continuous-delivery/pipeline/pipeline-base-image
+      image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
