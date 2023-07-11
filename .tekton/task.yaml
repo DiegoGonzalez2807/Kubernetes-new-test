@@ -61,7 +61,7 @@ spec:
           ibmcloud login -a $API -r $REGION;
           export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";    
           set -x;
-          cd /workspace && source ./scripts/pre-build-check.sh
+          cd /workspace && source /scripts/pre-build-check.sh
 
     - name: build-docker-image
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
