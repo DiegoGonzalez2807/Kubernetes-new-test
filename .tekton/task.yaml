@@ -23,7 +23,7 @@ spec:
       description: the ibmcloud registry region
     - name: dockerDef
       description: the docker def
-      default: "/root"
+      default: "./root"
   workspaces:
   - name: task-pvc
     mountPath: /artifacts   
