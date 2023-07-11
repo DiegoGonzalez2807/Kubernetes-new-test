@@ -87,7 +87,7 @@ else
 fi
 set -x
 buildctl build \
-    --frontenddockerfile.v0 \
+    --frontend dockerfile.v0 \
     --local context=. \
     --local dockerfile=. \
     --opt filename=./${DOCKER_FILE} \
