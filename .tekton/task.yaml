@@ -43,8 +43,6 @@ spec:
     - name: pre-build-check
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
       env:
-        - name: DOCKER_ROOT
-          value: $(inputs.params.dockerDef)
         - name: IBMCLOUD_API_KEY
           value: $(inputs.params.apikey)
         - name: API
@@ -63,7 +61,7 @@ spec:
           ibmcloud login -a $API -r $REGION;
           export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";    
           set -x;
-          source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh");
+          cd /workspace && source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh");
 
     - name: build-docker-image
       image: icr.io/continuous-delivery/pipeline/pipeline-base-image
