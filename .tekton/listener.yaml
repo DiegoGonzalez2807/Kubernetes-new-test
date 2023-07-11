@@ -71,7 +71,7 @@ metadata:
 spec:
   params:
     - name: repository
-      value: "https://github.com/emeloibmco/ibm-Kubernetes-Service-Tekton"
+      value: "https://github.com/DiegoGonzalez2807/Kubernetes-new-test.git"
     - name: revision
       value: "master"
 ---
