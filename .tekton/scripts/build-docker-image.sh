@@ -86,13 +86,7 @@ else
   done
 fi
 set -x
-docker build \
-    --file ${DOCKER_FILE} \
-    --build-arg ${BUILD_ARGS} \
-    --tag ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} \
-    --cache-from type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
-    .
-docker push ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
+docker build -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} .
 
 set +x
 
