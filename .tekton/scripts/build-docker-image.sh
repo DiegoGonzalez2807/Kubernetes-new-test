@@ -71,8 +71,7 @@ kubectl create secret --dry-run=true --output=json \
 jq -r '.data[".dockerconfigjson"]' | base64 -d > ${DOCKER_CONFIG}/config.json
 
 
-/.docker/cli-plugins/docker-buildx
-docker buildx version
+docker --version
 
 #docker -l debug --config .ro_config buildx create --name ci-builder --driver docker-container --driver-opt image=moby/buildkit:latest --bootstrap
 
