@@ -86,6 +86,10 @@ else
   done
 fi
 set -x
+curl -sL https://raw.githubusercontent.com/moby/buildkit/v0.9/docs/buildkitd.toml.md
+docker buildx create --config ./buildkitd.toml  --name myconfbuilder4
+docker buildx use myconfbuilder4
+
 buildctl build \
     --frontend=dockerfile.v0 --opt filename=${DOCKER_FILE} --local dockerfile=. \
     ${BUILD_ARGS} --local context=. \
