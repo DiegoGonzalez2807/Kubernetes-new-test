@@ -57,7 +57,7 @@ IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
  # buildctl --version
 #else 
   echo "Installing Buildkit builctl"
-  curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
+  curl -sL https://github.com/moby/buildkit/releases/download/v0.10.2/buildkit-v0.10.2.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
   buildctl --version
 #fi
 
