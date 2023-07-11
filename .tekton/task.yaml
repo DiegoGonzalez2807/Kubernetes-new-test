@@ -61,7 +61,8 @@ spec:
       args:
         - set -e -o pipefail;
           ibmcloud login -a $API -r $REGION;
-          export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
+          export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";    
+          set -x;
           source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh");
 
     - name: build-docker-image
