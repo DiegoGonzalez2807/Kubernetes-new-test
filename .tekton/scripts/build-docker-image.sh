@@ -70,6 +70,8 @@ kubectl create secret --dry-run=true --output=json \
   --docker-username=diegogibm --docker-email=diego.gonzalez.gualteros@ibm.com | \
 jq -r '.data[".dockerconfigjson"]' | base64 -d > ${DOCKER_CONFIG}/config.json
 
+
+docker buildx install
 docker buildx version
 
 #docker -l debug --config .ro_config buildx create --name ci-builder --driver docker-container --driver-opt image=moby/buildkit:latest --bootstrap
