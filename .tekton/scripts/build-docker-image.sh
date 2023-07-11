@@ -86,10 +86,6 @@ else
   done
 fi
 set -x
-curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz
-docker buildx create --config /home/rami/workspace/gaia/buildkitd.toml  --name myconfbuilder4
-docker buildx use myconfbuilder4
-
 buildctl build \
     --frontend=dockerfile.v0 --opt filename=${DOCKER_FILE} --local dockerfile=. \
     ${BUILD_ARGS} --local context=. \
