@@ -32,6 +32,7 @@ fi
 # https://cloud.ibm.com/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
 
 echo -e "Existing images in registry"
+systemctl start docker
 ibmcloud cr images
 
 # Minting image tag using format: BUILD_NUMBER--BRANCH-COMMIT_ID-TIMESTAMP
