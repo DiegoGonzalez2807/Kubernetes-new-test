@@ -1,15 +1,21 @@
 #!/bin/bash
 # uncomment to debug the script
 # set -x
-# This script does build a Docker image using Docker-in-Docker into IBM Container Service private image registry,
-# and copies information into a build.properties file, so they can be reused later on by other scripts
-# (e.g. image url, chart name, ...)
+# copy the script below into your app code repo (e.g. ./scripts/build_image_buildkit.sh) and 'source' it from your pipeline job
+#    source ./scripts/build_image_using_buildkit.sh
+# alternatively, you can source it from online script:
+#    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image_buildkit.sh")
+# ------------------
+# source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image_buildkit.sh
+# fail the script if a command fails
+# set -eo pipefail
 
-if [ -z "$REGISTRY_URL" ]; then
-  # Initialize REGISTRY_URL with the ibmcloud cr info output
-  export REGISTRY_URL=$(ibmcloud cr info | grep -i '^Container Registry' | sort | head -1 | awk '{print $3;}')
-fi
+# This script does build a Docker image into IBM Container Service private image registry using Buildkit buildctl - https://github.com/moby/buildkit#building-a-dockerfile-with-buildctl
+# Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
+# Also copies information into a build.properties file, so they can be reused later on by other scripts (e.g. image url, chart name, ...)
 
+# Input env variables (can be received via a pipeline environment properties.file.
+echo "DEBERIA CORRER ESTE SCRIPT"
 echo "REGISTRY_URL=${REGISTRY_URL}"
 echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
 echo "IMAGE_NAME=${IMAGE_NAME}"
@@ -31,14 +37,12 @@ fi
 # or learn more about the available environment variables at:
 # https://cloud.ibm.com/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
 
-echo -e "Existing images in registry"
-systemctl start docker
-ibmcloud cr images
+# To review or change build options use:
+# ibmcloud cr build --help
 
-# Minting image tag using format: BUILD_NUMBER--BRANCH-COMMIT_ID-TIMESTAMP
+# Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
 # e.g. 3-master-50da6912-20181123114435
 # (use build number as first segment to allow image tag as a patch release name according to semantic versioning)
-
 TIMESTAMP=$( date -u "+%Y%m%d%H%M%S")
 IMAGE_TAG=${TIMESTAMP}
 if [ ! -z "${GIT_COMMIT}" ]; then
@@ -47,28 +51,56 @@ if [ ! -z "${GIT_COMMIT}" ]; then
 fi
 if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
 IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
+
+# Checking ig buildctl is installed
+if which buildctl > /dev/null 2>&1; then
+  buildctl --version
+else 
+  echo "Installing Buildkit builctl"
+  curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
+  buildctl --version
+fi
+
+# Create the config.json file to make private container registry accessible
+export DOCKER_CONFIG=$(mktemp -d -t cr-config-XXXXXXXXXX)
+kubectl create secret --dry-run=true --output=json \
+  docker-registry registry-dockerconfig-secret \
+  --docker-server=us.icr.io \
+  --docker-password=${IBMCLOUD_API_KEY} \
+  --docker-username=diegogibm --docker-email=diego.gonzalez.gualteros@ibm.com | \
+jq -r '.data[".dockerconfigjson"]' | base64 -d > ${DOCKER_CONFIG}/config.json
+
 echo "=========================================================="
 echo -e "BUILDING CONTAINER IMAGE: ${IMAGE_NAME}:${IMAGE_TAG}"
 if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
 if [ -z "${DOCKER_FILE}" ]; then DOCKER_FILE=Dockerfile ; fi
-
-docker build --tag "$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG" -f ${DOCKER_ROOT}/${DOCKER_FILE} ${DOCKER_ROOT}
-RC=$?
-if [ "$RC" != "0" ]; then
-  exit $RC
+if [ -z "$EXTRA_BUILD_ARGS" ]; then
+  echo -e ""
+else
+  for buildArg in $EXTRA_BUILD_ARGS; do
+    if [ "$buildArg" == "--build-arg" ]; then
+      echo -e ""
+    else      
+      BUILD_ARGS="${BUILD_ARGS} --opt build-arg:$buildArg"
+    fi
+  done
 fi
+set -x
+curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz
+docker buildx create --config /home/rami/workspace/gaia/buildkitd.toml  --name myconfbuilder4
+docker buildx use myconfbuilder4
 
-docker inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
+buildctl build \
+    --frontend=dockerfile.v0 --opt filename=${DOCKER_FILE} --local dockerfile=. \
+    ${BUILD_ARGS} --local context=. \
+    --import-cache type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
+    --output type=image,name="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}",push=true
+set +x
+
+ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
 
 # Set PIPELINE_IMAGE_URL for subsequent jobs in stage (e.g. Vulnerability Advisor)
 export PIPELINE_IMAGE_URL="$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG"
-
-export DCT_DISABLED=${DCT_DISABLED:-true}
-docker push --disable-content-trust=$DCT_DISABLED "$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG" 
-RC=$?
-if [ "$RC" != "0" ]; then
-  exit $RC
-fi
 
 ibmcloud cr images --restrict ${REGISTRY_NAMESPACE}/${IMAGE_NAME}
 
@@ -99,8 +131,7 @@ echo "IMAGE_NAME=${IMAGE_NAME}" >> $ARCHIVE_DIR/build.properties
 echo "IMAGE_TAG=${IMAGE_TAG}" >> $ARCHIVE_DIR/build.properties
 # REGISTRY information from build.properties is used in Helm Chart deployment to generate cluster secret
 echo "REGISTRY_URL=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
-echo "REGISTRY_REGION=${REGISTRY_REGION}" >> $ARCHIVE_DIR/build.properties
 echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}" >> $ARCHIVE_DIR/build.properties
 echo "GIT_BRANCH=${GIT_BRANCH}" >> $ARCHIVE_DIR/build.properties
 echo "File 'build.properties' created for passing env variables to subsequent pipeline jobs:"
-cat $ARCHIVE_DIR/build.properties
+cat $ARCHIVE_DIR/build.properties | grep -v -i password
