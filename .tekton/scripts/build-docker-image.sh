@@ -86,11 +86,12 @@ else
   done
 fi
 set -x
-buildctl build \
-    --frontend=dockerfile.v0 --opt filename=${DOCKER_FILE} --local dockerfile=. \
-    ${BUILD_ARGS} --local context=. \
-    --import-cache type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
-    --output type=image,name="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}",push=true
+docker build \
+    --file ${DOCKER_FILE} \
+    --build-arg ${BUILD_ARGS} \
+    --tag ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} \
+    --cache-from type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
+    --push .
 set +x
 
 ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
