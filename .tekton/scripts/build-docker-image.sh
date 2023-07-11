@@ -67,7 +67,7 @@ kubectl create secret --dry-run=true --output=json \
   docker-registry registry-dockerconfig-secret \
   --docker-server=${REGISTRY_URL} \
   --docker-password=${IBMCLOUD_API_KEY} \
-  --docker-username=iamapikey --docker-email=diego.gonzalez.gualteros@ibm.com | \
+  --docker-username=diegogibm --docker-email=diego.gonzalez.gualteros@ibm.com | \
 jq -r '.data[".dockerconfigjson"]' | base64 -d > ${DOCKER_CONFIG}/config.json
 
 echo "=========================================================="
