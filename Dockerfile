@@ -16,7 +16,7 @@
 FROM node:alpine as frontend
 WORKDIR /usr/src/app
 COPY package.json .
-RUN npm install 
+RUN npm install
 COPY . .
 RUN npm install -g @angular/cli@13.1.1
 RUN npm run build
@@ -24,4 +24,4 @@ RUN npm run build
 # Angular app server
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=frontend /usr/src/app/dist/frontend /usr/share/nginx/html
+COPY --from=frontend /usr/src/app/dist/angular-web-app /usr/share/nginx/html
