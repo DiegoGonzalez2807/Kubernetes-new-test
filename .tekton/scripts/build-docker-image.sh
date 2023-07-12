@@ -92,9 +92,9 @@ else
   done
 fi
 set -x
-docker run --rm -d --name buildkitd --privileged moby/buildkit:local
-export BUILDKIT_HOST=docker-container://buildkitd
-buildctl debug info
+sudo buildkitd
+export BUILDKIT_HOST=unix:///run/buildkit/buildkitd.sock
+sudo buildctl debug info
 
 buildctl --addr tcp://0.0.0.0:1234 build \
     --frontend dockerfile.v0 \
