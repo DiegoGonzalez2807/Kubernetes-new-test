@@ -128,7 +128,7 @@ spec:
           value: $(params.registryNamespace)
         - name: IMAGE_NAME
           value: $(params.imageName)
-      command: ["/bin/bash", "-c"]
+      command: ["#!/usr/bin/env bash", "-c"]
       args:
         - set -e -o pipefail;
           ibmcloud login -a $API -r $REGION;
@@ -157,7 +157,7 @@ spec:
           value: "0"
         - name: GIT_BRANCH
           value: $(params.revision)
-      command: ["/bin/bash", "-c"]
+      command: ["#!/usr/bin/env bash", "-c"]
       args:
         - set -e -o pipefail;
           ibmcloud login -a $API -r $REGION;
