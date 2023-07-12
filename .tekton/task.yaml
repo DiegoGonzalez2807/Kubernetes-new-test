@@ -85,6 +85,17 @@ spec:
   workspaces:
   - name: task-pvc
     mountPath: /artifacts   
+  
+  resources:
+    outputs:
+      - name: built-image
+        type: image
+        description: "(Optional) The image to build"
+        optional: true
+  stepTemplate:
+    env:
+      - name: PIPELINE_DEBUG
+        value: $(params.pipeline-debug)
 
   steps:
     - name: clone-repo
