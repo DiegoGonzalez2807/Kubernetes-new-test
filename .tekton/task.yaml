@@ -85,6 +85,9 @@ spec:
   workspaces:
   - name: task-pvc
     mountPath: /artifacts   
+  - name: source
+    description: A workspace containing the source (Dockerfile, Docker context) to create the image
+    mountPath: /artifacts
   steps:
     - name: clone-repo
       image: alpine/git
