@@ -137,7 +137,7 @@ spec:
 
 
     - name: build-docker-image
-      image: $(params.buildkit-image)
+      image: moby/buildkit:v0.8.1
       env:
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
