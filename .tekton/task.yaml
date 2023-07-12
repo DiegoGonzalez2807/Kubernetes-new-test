@@ -111,12 +111,7 @@ spec:
         - set -e -o pipefail;
           echo "Cloning $REPOSITORY";
           cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
-      volumeMounts:
-        - mountPath: /cd-config
-          name: cd-config-volume
-        - mountPath: /steps
-          name: steps-volume
-        - mountPath: /scripts
+      
 
     - name: pre-build-check
       image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
@@ -139,6 +134,13 @@ spec:
           ibmcloud login -a $API -r $REGION;
           export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
           cd /workspace && source .tekton/scripts/pre-build-check.sh;
+      volumeMounts:
+        - mountPath: /cd-config
+          name: cd-config-volume
+        - mountPath: /steps
+          name: steps-volume
+        - mountPath: /scripts
+        
     - name: build-docker-image
       image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
