@@ -59,7 +59,6 @@ IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
   echo "Installing Buildkit buildctl"
   curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
   buildctl build --help
-  brew install buildkit
 #fi
 
 # Create the config.json file to make private container registry accessible
