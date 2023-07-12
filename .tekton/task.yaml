@@ -50,7 +50,7 @@ spec:
       default: ""
     - name: buildkit-image
       description: The name of the BuildKit image
-      default: "moby/buildkit:v0.8.1"
+      default: "moby/buildkit"
     - name: push-to-registry
       description: option to push the built image to registry or not. Default is `true`
       default: "true"
