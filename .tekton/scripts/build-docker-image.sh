@@ -57,7 +57,7 @@ IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
  # buildctl --version
 #else 
   echo "Installing Buildkit builctl"
-  curl -sL https://github.com/moby/buildkit/releases/download/v0.8.1/buildkit-v0.8.1.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
+  curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
   buildctl --version
 #fi
 
@@ -92,7 +92,7 @@ else
   done
 fi
 set -x
-buildctl build \
+buildctl --addr tcp://0.0.0.0:1234 build \
     --frontend dockerfile.v0 \
     --local context=. \
     --local dockerfile=. \
