@@ -165,6 +165,9 @@ spec:
           export REGISTRY_URL=$(ibmcloud cr info | sed "2q;d" | awk '{for(i=1;i<=NF;i++) if ($i=="Registry") print $(i+1)}');
           set -x;
           cd /workspace && source .tekton/scripts/build-docker-image.sh;
+  volumes:
+    - name: steps-volume
+      emptyDir: {}      
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
