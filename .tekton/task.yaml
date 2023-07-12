@@ -133,9 +133,7 @@ spec:
           ibmcloud login -a $API -r $REGION;
           export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh";
           cd /workspace && source .tekton/scripts/pre-build-check.sh;
-      volumeMounts:
-        - mountPath: /steps
-          name: steps-volume
+
 
     - name: build-docker-image
       image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
