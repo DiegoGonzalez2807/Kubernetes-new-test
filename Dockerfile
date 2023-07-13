@@ -13,16 +13,16 @@
 #   limitations under the License.
 
 # Angular app image
-FROM node:alpine as frontend
+FROM node:16.14.0-alpine as frontend
 WORKDIR /usr/src/app
 COPY package.json .
-RUN npm install -g @angular/core@8.2.14
-RUN npm i @angular/http
-RUN npm install
+RUN npm install 
 COPY . .
+RUN npm install -g @angular/cli@13.1.1
 RUN npm run build
 
 # Angular app server
-FROM nginx:alpine
+FROM nginx:1.20.2
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=frontend /usr/src/app/dist/angular-web-app /usr/share/nginx/html
+COPY --from=frontend /usr/src/app/dist/frontend /usr/share/nginx/html
+
