@@ -50,7 +50,7 @@ spec:
       default: ""
     - name: buildkit-image
       description: The name of the BuildKit image
-      default: "moby/buildkit"
+      default: "moby/buildkit:v0.8.1"
     - name: push-to-registry
       description: option to push the built image to registry or not. Default is `true`
       default: "true"
@@ -137,7 +137,7 @@ spec:
 
 
     - name: build-docker-image
-      image: moby/buildkit:v0.6.3-rootless
+      image: icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2
       env:
         - name: IBMCLOUD_API_KEY
           value: $(params.apikey)
@@ -166,9 +166,6 @@ spec:
           export REGISTRY_URL=$(ibmcloud cr info | sed "2q;d" | awk '{for(i=1;i<=NF;i++) if ($i=="Registry") print $(i+1)}');
           set -x;
           cd /workspace && source .tekton/scripts/build-docker-image.sh;
-  volumes:
-    - name: steps-volume
-      emptyDir: {}     
   sidecars:
     - image: "moby/buildkit:v0.8.1"
       name: server
@@ -183,7 +180,9 @@ spec:
            mkfs.ext4 /tmp/disk.img &&
            mount /tmp/disk.img /var/lib/buildkit; fi && buildkitd --addr tcp://localhost:1234;
       # Wait for the buildkit daemon to have available workers.
-
+  volumes:
+    - name: steps-volume
+      emptyDir: {}      
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
