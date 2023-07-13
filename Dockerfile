@@ -16,7 +16,7 @@
 FROM node:16.14.0-alpine as frontend
 WORKDIR /usr/src/app
 COPY package.json .
-RUN npm install -g npm@9.8.0
+RUN npm cache clean -f
 RUN sudo npm install
 COPY . .
 RUN npm install -g @angular/cli@13.1.1
