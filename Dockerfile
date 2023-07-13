@@ -18,10 +18,9 @@ WORKDIR /usr/src/app
 COPY package.json .
 RUN npm install --save --legacy-peer-deps
 COPY . .
-RUN npm install -g @angular/cli@13.1.1
 RUN npm run build
 
 # Angular app server
-FROM nginx:alpine
+FROM nginx:1.20.2
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=frontend /usr/src/app/dist/angular-web-app /usr/share/nginx/html
