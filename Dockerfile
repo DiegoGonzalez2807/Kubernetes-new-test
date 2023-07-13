@@ -16,10 +16,10 @@
 FROM node:alpine as frontend
 WORKDIR /usr/src/app
 COPY package.json .
-RUN npm install -g @angular/cli@7.2.16
-RUN npm install -g @angular/core@7.2.16
+RUN npm install -g @angular/core@8.2.14
 RUN npm install
 COPY . .
+RUN npm install -g @angular/cli@13.1.1
 RUN npm run build
 
 # Angular app server
