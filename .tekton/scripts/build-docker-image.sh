@@ -99,10 +99,10 @@ buildctl --addr tcp://0.0.0.0:1234 build \
     --frontend dockerfile.v0 \
     --local context=. \
     --local dockerfile=. \
-    --opt filename=./${DOCKER_FILE} \
+    --opt filename=${DOCKER_FILE} \
     --import-cache type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
     --output type=image,name="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}",push=true
-
+set +x
 ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
 
 # Set PIPELINE_IMAGE_URL for subsequent jobs in stage (e.g. Vulnerability Advisor)
