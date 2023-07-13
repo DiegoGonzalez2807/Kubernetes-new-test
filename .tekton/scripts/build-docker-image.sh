@@ -95,7 +95,7 @@ set -x
 #export BUILDKIT_HOST=unix:///run/buildkit/buildkitd.sock
 #sudo buildctl debug info
 
-buildctl build \
+buildctl --addr tcp://localhost:1234 build \
     --frontend dockerfile.v0 \
     --local context=. \
     --local dockerfile=. \
