@@ -99,7 +99,7 @@ buildctl --addr tcp://0.0.0.0:1234 build \
     --local context=. \
     --local dockerfile=. \
     --opt filename=./${DOCKER_FILE} \
-    --output type=image,name="us.icr.io/diego-cr-test/angulist-app:latest",push=true
+    --output type=image,name="us.icr.io/diego-cr-test/angulist-app",push=true
 
 ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:latest
 
