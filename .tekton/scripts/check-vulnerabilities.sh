@@ -15,6 +15,7 @@ if [ -f build.properties ]; then
   cat build.properties
 else 
   echo "build.properties : not found"
+  exit 1
 fi 
 
 # If running after build_image.sh in same stage, reuse the exported variable PIPELINE_IMAGE_URL
