@@ -57,7 +57,7 @@ IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
  # buildctl --version
 #else 
   echo "Installing Buildkit buildctl"
-  curl -sL https://github.com/moby/buildkit/releases/download/v0.11.6/buildkit-v0.11.6.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
+  curl -sL https://github.com/moby/buildkit/releases/download/v0.8.1/buildkit-v0.8.1.linux-amd64.tar.gz | tar -C /tmp -xz bin/buildctl && mv /tmp/bin/buildctl /usr/bin/buildctl && rmdir --ignore-fail-on-non-empty /tmp/bin
   buildctl build --help
 #fi
 
@@ -99,8 +99,6 @@ buildctl --addr tcp://0.0.0.0:1234 build \
     --local context=. \
     --local dockerfile=. \
     --opt filename=./${DOCKER_FILE} \
-    --import-cache type=registry,ref=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} \
-    --export-cache type=inline \
     --output type=image,name="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:latest",push=true
 
 ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:latest
